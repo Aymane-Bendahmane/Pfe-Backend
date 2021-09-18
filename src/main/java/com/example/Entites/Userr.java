@@ -32,6 +32,6 @@ public class Userr {
     Collection<Commande> commandes;
 
     @OneToMany(mappedBy = "userr")
-    Collection<Comment> comments;
+    Collection<Rating> ratings;
 
 }

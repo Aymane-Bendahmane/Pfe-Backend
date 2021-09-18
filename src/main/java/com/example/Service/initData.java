@@ -6,4 +6,5 @@ public interface initData {
       String initMarque();
       String InitUser();
       String initCommands();
+      String initRating();
 }

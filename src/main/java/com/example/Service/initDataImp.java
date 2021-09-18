@@ -12,7 +12,8 @@ import java.util.Random;
 
 @Service
 public class initDataImp implements initData {
-
+    @Autowired
+    RatingRepository ratingRepository;
     @Autowired
     ArticleRepository articleRepository;
     @Autowired
@@ -33,11 +34,11 @@ public class initDataImp implements initData {
 
             for (int i = 0; i < 12; i++) {
                 articleRepository.save(new Article(null, "Item"
-                        + i, random.nextFloat(),
+                        + i, random.nextFloat() + 300,
                         random.nextInt(12), "Description" +
                         random.nextInt(12),
                         "empty", marqueList.get(random.nextInt(6)), category,
-                        null));
+                        null, null));
             }
         });
 
@@ -68,7 +69,7 @@ public class initDataImp implements initData {
     @Override
     public String InitUser() {
         for (int i = 0; i < 4; i++) {
-            userRepository.save(new Userr(null, "user" + i + "@gmail.com", "user" + i, "user" + i, random.nextBoolean() ? "male" : "femel", "user" + i, "prenom" + i, random.nextInt(123456789) + "", "user" + 1 + " lot :" + random.nextInt(), null, null, null));
+            userRepository.save(new Userr(null, "user" + i + "@gmail.com", "user" + i, "user" + i, random.nextBoolean() ? "male" : "female", "user" + i, "prenom" + i, random.nextInt(123456789) + "", "user" + 1 + " lot :" + random.nextInt(), null, null, null));
         }
         return "Users initialized !";
     }
@@ -86,5 +87,22 @@ public class initDataImp implements initData {
         ));
 
         return "Commands initialized !";
+    }
+
+    @Override
+    public String initRating() {
+        Userr u0 = userRepository.getById(1L);
+        Userr u1 = userRepository.getById(2L);
+        Userr u2 = userRepository.getById(3L);
+        Userr u3 = userRepository.getById(4L);
+        List<Article> articleList = articleRepository.findAll();
+
+        for (int i = 0; i < 10; i++) {
+            ratingRepository.save(new Rating(null, random.nextInt(5), u0, articleList.get(i)));
+            ratingRepository.save(new Rating(null, random.nextInt(5), u1, articleList.get(i)));
+            ratingRepository.save(new Rating(null, random.nextInt(5), u2, articleList.get(i)));
+            ratingRepository.save(new Rating(null, random.nextInt(5), u3, articleList.get(i)));
+        }
+        return "Rating initialized";
     }
 }

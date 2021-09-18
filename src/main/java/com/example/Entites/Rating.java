@@ -10,14 +10,17 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Comment {
+public class Rating {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String comment;
+    private Integer stare;
 
     @ManyToOne
     private Userr userr;
+
+    @ManyToOne
+    private Article article;
 }

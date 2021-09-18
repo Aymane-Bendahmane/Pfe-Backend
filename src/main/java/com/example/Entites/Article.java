@@ -31,4 +31,7 @@ public class Article {
     @OneToMany
     Collection <Commande> commandes ;
 
+    @OneToMany(mappedBy = "article")
+    Collection<Rating> ratings;
+
 }

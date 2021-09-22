@@ -34,10 +34,10 @@ public class initDataImp implements initData {
 
             for (int i = 0; i < 12; i++) {
                 articleRepository.save(new Article(null, "Item"
-                        + i, random.nextFloat() + 300,
+                        + random.nextInt(50), random.nextFloat() + 300,
                         random.nextInt(12), "Description" +
                         random.nextInt(12),
-                        "empty", marqueList.get(random.nextInt(6)), category,
+                        "empty.png", marqueList.get(random.nextInt(6)), category,
                         null, null));
             }
         });
@@ -48,10 +48,10 @@ public class initDataImp implements initData {
 
     @Override
     public String initCategories() {
-        categoryRepository.save(new Category(null, "Electronics", null));
-        categoryRepository.save(new Category(null, "Plastic", null));
-        categoryRepository.save(new Category(null, "Food", null));
-        categoryRepository.save(new Category(null, "Toys", null));
+        categoryRepository.save(new Category(null, "laptops", null));
+        categoryRepository.save(new Category(null, "smartphones", null));
+        categoryRepository.save(new Category(null, "cameras", null));
+        categoryRepository.save(new Category(null, "Accessories", null));
         return "Categories initialized !";
     }
 
@@ -95,9 +95,11 @@ public class initDataImp implements initData {
         Userr u1 = userRepository.getById(2L);
         Userr u2 = userRepository.getById(3L);
         Userr u3 = userRepository.getById(4L);
+
         List<Article> articleList = articleRepository.findAll();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
+
             ratingRepository.save(new Rating(null, random.nextInt(5), u0, articleList.get(i)));
             ratingRepository.save(new Rating(null, random.nextInt(5), u1, articleList.get(i)));
             ratingRepository.save(new Rating(null, random.nextInt(5), u2, articleList.get(i)));

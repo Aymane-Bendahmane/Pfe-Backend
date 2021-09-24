@@ -1,6 +1,8 @@
 package com.example;
 
 import com.example.Entites.Article;
+import com.example.Entites.Category;
+import com.example.Entites.Commande;
 import com.example.Entites.Rating;
 import com.example.GenerateCSV.GeneCsv;
 import com.example.Repositories.ArticleRepository;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,19 +28,22 @@ public class BackEndApplication implements CommandLineRunner {
     @Autowired
     GeneCsv geneCsv;
     List<String[]> dataLines = new ArrayList<>();
-
+    @Autowired
+    RepositoryRestConfiguration repositoryRestConfiguration;
     public static void main(String[] args) {
         SpringApplication.run(BackEndApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
+        repositoryRestConfiguration.exposeIdsFor(Article.class, Category.class, Commande.class,Rating.class);
         System.out.println(i.initCategories());
         System.out.println(i.initMarque());
         System.out.println(i.initArticles());
         System.out.println(i.InitUser());
         System.out.println(i.initCommands());
         System.out.println(i.initRating());
+
         GeneCsv geneCsv = new GeneCsv();
         List<Rating> ratings = ratingRepository.findAll();
 

@@ -22,6 +22,7 @@ public class Commande {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+    private Integer quantité;
     private Float total ;
     private String cmdDescription;
 

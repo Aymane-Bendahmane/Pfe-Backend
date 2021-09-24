@@ -1,5 +1,6 @@
 package com.example.Entites;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,10 +29,14 @@ public class Article {
     @ManyToOne
     Category category ;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany
     Collection <Commande> commandes ;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "article")
     Collection<Rating> ratings;
+
+
 
 }

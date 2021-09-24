@@ -26,10 +26,14 @@ public class initDataImp implements initData {
     @Autowired
     CommandeRepository commandeRepository;
 
+
     public String initArticles() {
 
         random = new Random();
+
         List<Marque> marqueList = marqueRepository.findAll();
+
+
         categoryRepository.findAll().forEach(category -> {
 
             for (int i = 0; i < 12; i++) {
@@ -83,7 +87,7 @@ public class initDataImp implements initData {
         articles.add(articleRepository.findById(2L).get());
         articles.add(articleRepository.findById(3L).get());
         commandeRepository.save(new Commande(
-                null, new Date(), null, "purchases description", articles, u
+                null, new Date(), random.nextInt(5), null, "purchases description", articles, u
         ));
 
         return "Commands initialized !";
@@ -100,11 +104,13 @@ public class initDataImp implements initData {
 
         for (int i = 0; i < 12; i++) {
 
-            ratingRepository.save(new Rating(null, random.nextInt(5), u0, articleList.get(i)));
-            ratingRepository.save(new Rating(null, random.nextInt(5), u1, articleList.get(i)));
-            ratingRepository.save(new Rating(null, random.nextInt(5), u2, articleList.get(i)));
-            ratingRepository.save(new Rating(null, random.nextInt(5), u3, articleList.get(i)));
+            ratingRepository.save(new Rating(null, random.nextInt(5), u0, articleList.get(i),"i highly recommend it", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5), u1, articleList.get(i),"Good Product", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5), u2, articleList.get(i),"Excellent service", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5), u3, articleList.get(i),"Good ", new Date()));
         }
         return "Rating initialized";
     }
+
+
 }

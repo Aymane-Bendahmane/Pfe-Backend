@@ -15,12 +15,14 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class APiController {
     @Autowired
-    ArticleRepository articleRepository ;
+    ArticleRepository articleRepository;
     @Autowired
-    CategoryRepository categoryRepository ;
+    CategoryRepository categoryRepository;
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = "/photoProduct/{id}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getPhoto(@PathVariable("id") Long id) throws IOException {
         //System.out.println(id);
@@ -29,18 +31,30 @@ public class APiController {
         return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "/PfeEcomerce/Articles/" + article.getPhoto()));
 
     }
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping(path = "/uploadPhoto/{id}")
     public void uploadPhoto(MultipartFile file, @PathVariable Long id) throws IOException {
         Article article = articleRepository.findById(id).get();
-        article.setPhoto(id+"__"+file.getOriginalFilename());
-        Files.write(Paths.get(System.getProperty("user.home") + "/PfeEcomerce/Articles/" + article.getPhoto()),file.getBytes()) ;
+        article.setPhoto(id + "__" + file.getOriginalFilename());
+        Files.write(Paths.get(System.getProperty("user.home") + "/PfeEcomerce/Articles/" + article.getPhoto()), file.getBytes());
         articleRepository.save(article);
     }
 
-    @CrossOrigin("*")
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/getArticlesBycategories/{category}")
-    public List<Article> getArticlesByCategories(@PathVariable String category){
+    public List<Article> getArticlesByCategories(@PathVariable String category) {
         Category category1 = categoryRepository.findCategoryByCatNom(category);
         return articleRepository.findArticleByCategory(category1);
     }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/getFirstArticlesByCategories/{category}")
+    public List<Article> getFirstArticlesByCategories(@PathVariable String category) {
+        Category category1 = categoryRepository.findCategoryByCatNom(category);
+        List<Article> articles = articleRepository.findArticleByCategory(category1);
+        articles.subList(0, 5);
+        return  articles.subList(0, 5);
+    }
+
 }

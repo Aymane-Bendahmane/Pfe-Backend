@@ -10,7 +10,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestResource
 public interface ArticleRepository extends JpaRepository<Article,Long> {
     List<Article> findArticleByCategory(Category category);

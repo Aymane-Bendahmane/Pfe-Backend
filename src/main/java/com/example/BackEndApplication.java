@@ -13,9 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -30,6 +35,11 @@ public class BackEndApplication implements CommandLineRunner {
     List<String[]> dataLines = new ArrayList<>();
     @Autowired
     RepositoryRestConfiguration repositoryRestConfiguration;
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     public static void main(String[] args) {
         SpringApplication.run(BackEndApplication.class, args);
     }
@@ -37,13 +47,14 @@ public class BackEndApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         repositoryRestConfiguration.exposeIdsFor(Article.class, Category.class, Commande.class,Rating.class);
+
         System.out.println(i.initCategories());
         System.out.println(i.initMarque());
         System.out.println(i.initArticles());
         System.out.println(i.InitUser());
         System.out.println(i.initCommands());
         System.out.println(i.initRating());
-
+        System.out.println(i.initRoles());
         GeneCsv geneCsv = new GeneCsv();
         List<Rating> ratings = ratingRepository.findAll();
 
@@ -54,4 +65,5 @@ public class BackEndApplication implements CommandLineRunner {
         });
         geneCsv.givenDataArray_whenConvertToCSV_thenOutputCreated(dataLines);
     }
+
 }

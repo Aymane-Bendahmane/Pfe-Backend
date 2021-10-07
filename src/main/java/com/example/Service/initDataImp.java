@@ -3,6 +3,7 @@ package com.example.Service;
 import com.example.Entites.*;
 import com.example.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public class initDataImp implements initData {
     Random random;
     @Autowired
     CommandeRepository commandeRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    @Autowired
+    RoleRepository roleRepository;
 
 
     public String initArticles() {
@@ -72,9 +77,14 @@ public class initDataImp implements initData {
 
     @Override
     public String InitUser() {
+
         for (int i = 0; i < 4; i++) {
-            userRepository.save(new Userr(null, "user" + i + "@gmail.com", "user" + i, "user" + i, random.nextBoolean() ? "male" : "female", "user" + i, "prenom" + i, random.nextInt(123456789) + "", "user" + 1 + " lot :" + random.nextInt(), null, null, null));
+            userRepository.save(new Userr(null, "user" + i + "@gmail.com", "user" + i, passwordEncoder.encode("1234"),
+                    random.nextBoolean() ? "male" : "female", "user" + i, "prenom" + i, random.nextInt(123456789) + "",
+                    "user" + 1 + " lot :" + random.nextInt(), null, null, null));
         }
+
+
         return "Users initialized !";
     }
 
@@ -104,12 +114,37 @@ public class initDataImp implements initData {
 
         for (int i = 0; i < 12; i++) {
 
-            ratingRepository.save(new Rating(null, random.nextInt(5), u0, articleList.get(i),"i highly recommend it", new Date()));
-            ratingRepository.save(new Rating(null, random.nextInt(5), u1, articleList.get(i),"Good Product", new Date()));
-            ratingRepository.save(new Rating(null, random.nextInt(5), u2, articleList.get(i),"Excellent service", new Date()));
-            ratingRepository.save(new Rating(null, random.nextInt(5), u3, articleList.get(i),"Good ", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5)+1, u0, articleList.get(i), "i highly recommend it", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5)+1, u1, articleList.get(i), "Good Product", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5)+1, u2, articleList.get(i), "Excellent service", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5)+1, u3, articleList.get(i), "Good ", new Date()));
         }
         return "Rating initialized";
+    }
+
+    @Override
+    public Userr ConsultUserByName(String s) {
+        return userRepository.findUserrByNom(s);
+    }
+
+    @Override
+    public String initRoles() {
+        roleRepository.save(new Role(null, "ADMIN", ""));
+        roleRepository.save(new Role(null, "USER", ""));
+
+        List<Role> role1 = roleRepository.findRolesByRole("USER");
+        List<Role> role2 = roleRepository.findRolesByRole("ADMIN");
+
+        userRepository.findAll().forEach(u->{
+            u.setRoles(role1);
+            userRepository.save(u);
+        });
+
+        userRepository.save(
+                new Userr(null, "ADMIN@gmail.com", "admin", passwordEncoder.encode("1234"),
+                        random.nextBoolean() ? "male" : "female", "admin", "admin", random.nextInt(123456789) +
+                        "", "user" + 1 + " lot :" + random.nextInt(), role2, null, null));
+        return "Roles initialized";
     }
 
 

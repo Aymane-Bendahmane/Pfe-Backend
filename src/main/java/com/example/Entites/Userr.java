@@ -26,7 +26,7 @@ public class Userr {
     private String phone;
     private String userAddress ;
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     Collection<Role> roles;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

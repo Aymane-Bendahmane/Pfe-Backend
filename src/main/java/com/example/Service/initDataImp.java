@@ -31,6 +31,8 @@ public class initDataImp implements initData {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    ProductItemsRepository productItemsRepository;
 
     public String initArticles() {
 
@@ -46,7 +48,7 @@ public class initDataImp implements initData {
                         + random.nextInt(50), random.nextFloat() + 300,
                         random.nextInt(12), "Description" +
                         random.nextInt(12),
-                        "empty.png", marqueList.get(random.nextInt(6)), category,
+                        category.getCatNom() + ".png", marqueList.get(random.nextInt(6)), category,
                         null, null));
             }
         });
@@ -91,20 +93,24 @@ public class initDataImp implements initData {
     @Override
     public String initCommands() {
         Userr u = userRepository.findById(1L).get();
-        List<Article> articles = new ArrayList<>();
-        articles.add(articleRepository.findById(1L).get());
-        articles.add(articleRepository.findById(4L).get());
-        articles.add(articleRepository.findById(2L).get());
-        articles.add(articleRepository.findById(3L).get());
-        commandeRepository.save(new Commande(
-                null, new Date(), random.nextInt(5), null, "purchases description", articles, u
-        ));
+        List<ProductItem> productItems = new ArrayList<>();
+
+        ProductItem productItem1 = new ProductItem(null, 2, articleRepository.findById(1L).get());
+        ProductItem productItem2 = new ProductItem(null, 2, articleRepository.findById(4L).get());
+
+
+        productItems.add(productItemsRepository.save(productItem1));
+        productItems.add(productItemsRepository.save(productItem2));
+
+        commandeRepository.save(new Commande(null, new Date(), null,
+                "purchases description", productItems, u));
 
         return "Commands initialized !";
     }
 
     @Override
     public String initRating() {
+
         Userr u0 = userRepository.getById(1L);
         Userr u1 = userRepository.getById(2L);
         Userr u2 = userRepository.getById(3L);
@@ -114,10 +120,11 @@ public class initDataImp implements initData {
 
         for (int i = 0; i < 12; i++) {
 
-            ratingRepository.save(new Rating(null, random.nextInt(5)+1, u0, articleList.get(i), "i highly recommend it", new Date()));
-            ratingRepository.save(new Rating(null, random.nextInt(5)+1, u1, articleList.get(i), "Good Product", new Date()));
-            ratingRepository.save(new Rating(null, random.nextInt(5)+1, u2, articleList.get(i), "Excellent service", new Date()));
-            ratingRepository.save(new Rating(null, random.nextInt(5)+1, u3, articleList.get(i), "Good ", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5) + 1, u0, articleList.get(i), "i highly recommend it", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5) + 1, u1, articleList.get(i), "Good Product", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5) + 1, u2, articleList.get(i), "Excellent service", new Date()));
+            ratingRepository.save(new Rating(null, random.nextInt(5) + 1, u3, articleList.get(i), "Good ", new Date()));
+
         }
         return "Rating initialized";
     }
@@ -135,7 +142,7 @@ public class initDataImp implements initData {
         List<Role> role1 = roleRepository.findRolesByRole("USER");
         List<Role> role2 = roleRepository.findRolesByRole("ADMIN");
 
-        userRepository.findAll().forEach(u->{
+        userRepository.findAll().forEach(u -> {
             u.setRoles(role1);
             userRepository.save(u);
         });

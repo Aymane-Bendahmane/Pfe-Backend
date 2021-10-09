@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.Entites.Userr;
 import com.example.Filters.JwTUtil;
+import com.example.Repositories.UserRepository;
 import com.example.Service.initDataImp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +27,12 @@ import java.util.stream.Collectors;
 public class AuthenticationController {
     @Autowired
     initDataImp i;
+
+
+    @GetMapping(path = "/profile")
+    Userr profile(Principal principal) {
+        return i.ConsultUserByName(principal.getName());
+    }
 
     @GetMapping(path = "/RefreshToken")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception { //Refreshing the access token after verifying the refresh token

@@ -18,16 +18,14 @@ public class Commande {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    private Integer quantité;
     private Float total ;
     private String cmdDescription;
 
     @OneToMany(fetch = FetchType.LAZY)
-    private Collection<Article> articles ;
+    private Collection<ProductItem> productItems ;
 
     @ManyToOne
     private Userr userr ;

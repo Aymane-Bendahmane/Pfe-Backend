@@ -30,5 +30,7 @@ public class Commande {
     @ManyToOne
     private Userr userr ;
 
+    @Transient
+    private Long idUser;
 
 }

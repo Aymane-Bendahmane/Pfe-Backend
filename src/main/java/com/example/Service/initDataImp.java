@@ -1,6 +1,7 @@
 package com.example.Service;
 
 import com.example.Entites.*;
+import com.example.Entites.ProductItem;
 import com.example.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -95,15 +96,15 @@ public class initDataImp implements initData {
         Userr u = userRepository.findById(1L).get();
         List<ProductItem> productItems = new ArrayList<>();
 
-        ProductItem productItem1 = new ProductItem(null, 2, articleRepository.findById(1L).get());
-        ProductItem productItem2 = new ProductItem(null, 2, articleRepository.findById(4L).get());
+        ProductItem productItem1 = new ProductItem(null, 2, null,articleRepository.findById(1L).get());
+        ProductItem productItem2 = new ProductItem(null, 2,null ,articleRepository.findById(4L).get());
 
 
         productItems.add(productItemsRepository.save(productItem1));
         productItems.add(productItemsRepository.save(productItem2));
 
         commandeRepository.save(new Commande(null, new Date(), null,
-                "purchases description", productItems, u));
+                "purchases description", productItems, u,null));
 
         return "Commands initialized !";
     }

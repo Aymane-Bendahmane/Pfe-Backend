@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,6 +43,7 @@ public class securityProprieties extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.headers().frameOptions().disable();
         http.authorizeRequests().antMatchers("/RefreshToken/**", "/articles/**", "/photoProduct/**", "/getArticlesBycategories/**", "/getFirstArticlesByCategories/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/createUser","/createCommande").permitAll();
         http.authorizeRequests().antMatchers("/ratings/**").hasAnyAuthority("USER");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new jwtFilter(authenticationManagerBean()));

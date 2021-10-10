@@ -1,21 +1,24 @@
 package com.example.Controller;
 
-import com.example.Entites.Article;
-import com.example.Entites.Category;
+import com.example.Entites.*;
 
-import com.example.Repositories.ArticleRepository;
-import com.example.Repositories.CategoryRepository;
+import com.example.Repositories.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -25,10 +28,12 @@ public class APiController {
     ArticleRepository articleRepository;
     @Autowired
     CategoryRepository categoryRepository;
-
-
-
-
+    @Autowired
+    CommandeRepository commandeRepository;
+    @Autowired
+    ProductItemsRepository productItemsRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping(path = "/photoProduct/{id}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getPhoto(@PathVariable("id") Long id) throws IOException {
@@ -63,4 +68,40 @@ public class APiController {
         return articles.subList(0, 5);
     }
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @PostMapping("/createUser")
+    Userr createUSer(@RequestBody Userr u) {
+        u.setUserPassword(passwordEncoder.encode(u.getUserPassword()));
+        System.out.println(u);
+        return null;
+    }
+
+    @PostMapping("/createCommande")
+    ResponseEntity<Commande> createCommande(@RequestBody Commande cammande) {
+        try {
+            Userr u;
+            if (cammande.getIdUser() != null) {
+                u = userRepository.findById(cammande.getIdUser()).get();
+                cammande.setUserr(u);
+            }
+
+            if (!cammande.getProductItems().isEmpty())
+                cammande.getProductItems().forEach(productItem -> {
+                    Long id = productItem.getId_atyicle();
+                    Article a = articleRepository.findArticleById(id);
+                    productItem.setArticle(a);
+                    productItemsRepository.save(productItem);
+                });
+            cammande.setDate(new Date());
+            commandeRepository.save(cammande);
+
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return new ResponseEntity<>(cammande, HttpStatus.OK);
+    }
 }

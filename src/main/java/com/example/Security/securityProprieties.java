@@ -35,6 +35,13 @@ public class securityProprieties extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserDetailsServiceImp userDetailsServiceImp;
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/**",
+            "/webjars/**",
+            "/swagger-ui/**"
+    };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -42,7 +49,9 @@ public class securityProprieties extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.headers().frameOptions().disable();
-        http.authorizeRequests().antMatchers("/RefreshToken/**", "/articles/**", "/photoProduct/**", "/getArticlesBycategories/**", "/getFirstArticlesByCategories/**").permitAll();
+        http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
+        http.authorizeRequests().antMatchers("/RefreshToken/**", "/getAverageRating/**","/articles/**","/swagger-ui.html",
+                "/photoProduct/**", "/getArticlesBycategories/**", "/getFirstArticlesByCategories/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/createUser","/createCommande").permitAll();
         http.authorizeRequests().antMatchers("/ratings/**").hasAnyAuthority("USER");
         http.authorizeRequests().anyRequest().authenticated();

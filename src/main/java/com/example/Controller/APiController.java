@@ -4,6 +4,9 @@ import com.example.Entites.*;
 
 import com.example.Repositories.*;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -14,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,6 +25,9 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
+@Api("Other endpoints beside spring data")
+@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+
 public class APiController {
     @Autowired
     ArticleRepository articleRepository;
@@ -34,6 +39,8 @@ public class APiController {
     ProductItemsRepository productItemsRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    RatingRepository ratingRepository;
 
     @GetMapping(path = "/photoProduct/{id}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getPhoto(@PathVariable("id") Long id) throws IOException {
@@ -62,10 +69,11 @@ public class APiController {
 
     @GetMapping("/getFirstArticlesByCategories/{category}")
     public List<Article> getFirstArticlesByCategories(@PathVariable String category) {
+
         Category category1 = categoryRepository.findCategoryByCatNom(category);
         List<Article> articles = articleRepository.findArticleByCategory(category1);
-        articles.subList(0, 5);
-        return articles.subList(0, 5);
+
+        return articles.subList(articles.size() - 4, articles.size());
     }
 
     @Autowired
@@ -96,12 +104,23 @@ public class APiController {
                 });
             cammande.setDate(new Date());
             commandeRepository.save(cammande);
-
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
         return new ResponseEntity<>(cammande, HttpStatus.OK);
     }
+
+    @GetMapping("/getAverageRating/{id}")
+    ResponseEntity<Integer> getAverageRating(@PathVariable Long id) {
+        int sum=0;
+        Integer a=0;
+        Article article = articleRepository.findById(id).get();
+        if (article != null) {
+            a = ratingRepository.countRatingByArticle(article);
+            sum = ratingRepository.findAllByArticle(article).stream().mapToInt(Rating::getStare).sum();
+        }
+        System.out.println(sum/a);
+        return new ResponseEntity<>(sum/a, HttpStatus.OK);
+    }
+
 }

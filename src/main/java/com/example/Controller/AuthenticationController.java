@@ -9,6 +9,9 @@ import com.example.Filters.JwTUtil;
 import com.example.Repositories.UserRepository;
 import com.example.Service.initDataImp;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,9 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
+@Api("Basic Authentication endpoints")
+@ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+
 public class AuthenticationController {
     @Autowired
     initDataImp i;

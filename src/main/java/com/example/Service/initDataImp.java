@@ -119,7 +119,7 @@ public class initDataImp implements initData {
 
         List<Article> articleList = articleRepository.findAll();
 
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 48; i++) {
 
             ratingRepository.save(new Rating(null, random.nextInt(5) + 1, u0, articleList.get(i), "i highly recommend it", new Date()));
             ratingRepository.save(new Rating(null, random.nextInt(5) + 1, u1, articleList.get(i), "Good Product", new Date()));

@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.ws.Response;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -121,6 +122,12 @@ public class APiController {
         }
         System.out.println(sum/a);
         return new ResponseEntity<>(sum/a, HttpStatus.OK);
+    }
+
+    @PostMapping("/saveRating")
+    ResponseEntity<Rating> saveRAting(@RequestBody Rating r ){
+
+        return new ResponseEntity<>(ratingRepository.save(r),HttpStatus.OK);
     }
 
 }

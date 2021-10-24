@@ -53,7 +53,7 @@ public class securityProprieties extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/RefreshToken/**", "/getAverageRating/**","/articles/**","/swagger-ui.html",
                 "/photoProduct/**", "/getArticlesBycategories/**", "/getFirstArticlesByCategories/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/createUser","/createCommande").permitAll();
-        http.authorizeRequests().antMatchers("/ratings/**").hasAnyAuthority("USER");
+        //http.authorizeRequests().antMatchers("/ratings/**").hasAnyAuthority("USER");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new jwtFilter(authenticationManagerBean()));
         //************************** add Filters

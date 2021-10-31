@@ -49,11 +49,13 @@ public class securityProprieties extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.headers().frameOptions().disable();
-        http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
-        http.authorizeRequests().antMatchers("/RefreshToken/**", "/getAverageRating/**","/articles/**","/swagger-ui.html",
-                "/photoProduct/**", "/getArticlesBycategories/**", "/getFirstArticlesByCategories/**").permitAll();
+        http.authorizeRequests().antMatchers("/RefreshToken/**", "/articles/**", "/photoProduct/**", "/getArticlesBycategories/**", "/getFirstArticlesByCategories/**", "/editArticle/**","/swagger-ui.html").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/createUser","/createCommande").permitAll();
-        //http.authorizeRequests().antMatchers("/ratings/**").hasAnyAuthority("USER");
+        http.authorizeRequests().antMatchers("/ratings/**").hasAnyAuthority("USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/marks/**","/commandes/**","/commandess/**","/users/**","/products/**","/categ/**").hasAnyAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/addMarque/**","/addUser/**","/addProd/**","/addCmd/**").hasAnyAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/Dcommande/**").hasAnyAuthority("ADMIN");
+        //http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/Dmarque/{id}/**","/Dmarque/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new jwtFilter(authenticationManagerBean()));
         //************************** add Filters
@@ -75,7 +77,7 @@ public class securityProprieties extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource()
     {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200/"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200/","http://localhost:4201/"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization"));
         configuration.setAllowCredentials(true);

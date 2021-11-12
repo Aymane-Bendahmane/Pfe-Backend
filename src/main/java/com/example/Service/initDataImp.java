@@ -80,7 +80,7 @@ public class initDataImp implements initData {
 
     @Override
     public String InitUser() {
-
+        userRepository.save(new Userr(null,"aymane.bendahmane14@gmail.com","aymane",passwordEncoder.encode("1234"),"male","aymane","",null,"",null,null,null));
         for (int i = 0; i < 4; i++) {
             userRepository.save(new Userr(null, "user" + i + "@gmail.com", "user" + i, passwordEncoder.encode("1234"),
                     random.nextBoolean() ? "male" : "female", "user" + i, "prenom" + i, random.nextInt(123456789) + "",

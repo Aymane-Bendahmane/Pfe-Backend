@@ -4,6 +4,7 @@ import com.example.Entites.*;
 
 import com.example.Repositories.*;
 
+import com.example.email.EmailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -50,7 +51,8 @@ public class APiController {
     public RoleRepository rolesReposiroty;
     @Autowired
     public RatingRepository ratingRepository;
-
+    @Autowired
+    public EmailService emailService;
     @GetMapping(path = "/photoProduct/{id}", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getPhoto(@PathVariable("id") Long id) throws IOException {
         //System.out.println(id);
@@ -101,8 +103,8 @@ public class APiController {
 
     @PostMapping("/createCommande")
     ResponseEntity<Commande> createCommande(@RequestBody Commande cammande) {
+        Userr u = null;
         try {
-            Userr u;
             if (cammande.getIdUser() != null) {
                 u = userRepository.findById(cammande.getIdUser()).get();
                 cammande.setUserr(u);
@@ -117,6 +119,10 @@ public class APiController {
                 });
             cammande.setDate(new Date());
             commandeRepository.save(cammande);
+            if(u.getEmail() != null){
+                String message = "Hello Mr."+u.getPrenom()+" We'are that to tell that your order has been confirmed :)!";
+                emailService.sendSimpleMessage(u.getEmail(),"Success Order Placement",message);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

@@ -51,7 +51,7 @@ public class securityProprieties extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
         http.authorizeRequests().antMatchers("/RefreshToken/**", "/articles/**", "/photoProduct/**", "/getArticlesBycategories/**", "/getFirstArticlesByCategories/**", "/editArticle/**","/swagger-ui.html","/getAverageRating/**","/login").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/createUser","/createCommande").permitAll();
-        http.authorizeRequests().antMatchers("/ratings/**","/profile").hasAnyAuthority("USER");
+        http.authorizeRequests().antMatchers("/ratings/**","/profile");
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/marks/**","/commandes/**","/commandess/**","/users/**","/products/**","/categ/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/addMarque/**","/addUser/**","/addProd/**","/addCmd/**").hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/Dcommande/**").hasAnyAuthority("ADMIN");

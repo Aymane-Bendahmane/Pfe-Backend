@@ -12,6 +12,8 @@ import java.util.List;
 public interface ArticleRepository extends JpaRepository<Article,Long> {
 
     List<Article> findArticleByCategory(Category category);
+    List<Article> findArticlesByArtdesignation(String  Artdesignation);
     Article findArticleById(Long id);
+
 
 }

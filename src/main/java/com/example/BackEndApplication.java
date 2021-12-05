@@ -51,7 +51,9 @@ public class BackEndApplication implements CommandLineRunner {
         System.out.println(i.initMarque());
         System.out.println(i.initArticles());
         System.out.println(i.InitUser());
-        System.out.println(i.initCommands());
+        for (int j = 0; j < 300; j++) {
+            System.out.println(i.initCommands());
+        }
         System.out.println(i.initRating());
         System.out.println(i.initRoles());
         GeneCsv geneCsv = new GeneCsv();

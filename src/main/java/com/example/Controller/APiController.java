@@ -4,6 +4,7 @@ import com.example.Entites.*;
 
 import com.example.Repositories.*;
 
+import com.example.Service.initDataImp;
 import com.example.email.EmailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +25,7 @@ import javax.xml.ws.Response;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -35,6 +37,8 @@ import java.util.List;
 @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
 
 public class APiController {
+    @Autowired
+    com.example.Service.initDataImp service ;
     @Autowired
     ArticleRepository articleRepository;
     @Autowired
@@ -334,9 +338,9 @@ public class APiController {
         u.getRatings().forEach(r -> {
             ratingRepository.deleteById(r.getId());
         });
-        u.getCommandes().forEach(c -> {
+        /*u.getCommandes().forEach(c -> {
             commandeRepository.deleteById(c.getId());
-        });
+        });*/
         userRepository.deleteById(id);
     }
 
@@ -423,4 +427,12 @@ public class APiController {
         return commandeRepository.save(m);
     }
 
+    @GetMapping("/mycommands")
+    List<Commande> commandeList(Principal p){
+        return service.getCommands(p);
+    }
+    @GetMapping("/search/{keyword}")
+    List<Article> search(@PathVariable("keyword") String keyword){
+        return articleRepository.findArticlesByArtdesignation(keyword);
+    }
 }

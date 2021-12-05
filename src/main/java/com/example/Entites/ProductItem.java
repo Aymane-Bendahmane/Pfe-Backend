@@ -1,14 +1,13 @@
 package com.example.Entites;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -19,6 +18,6 @@ public class ProductItem implements Serializable {
     private Integer qt;
     @Transient
     private Long id_atyicle;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Article article;
 }

@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.security.Principal;
+import java.util.*;
 
 @Service
 public class initDataImp implements initData {
@@ -50,7 +48,7 @@ public class initDataImp implements initData {
                         random.nextInt(12), "Description" +
                         random.nextInt(12),
                         category.getCatNom() + ".png", marqueList.get(random.nextInt(6)), category,
-                        null, null));
+                        null));
             }
         });
 
@@ -80,11 +78,11 @@ public class initDataImp implements initData {
 
     @Override
     public String InitUser() {
-        userRepository.save(new Userr(null,"aymane.bendahmane14@gmail.com","aymane",passwordEncoder.encode("1234"),"male","aymane","",null,"",null,null,null));
+        userRepository.save(new Userr(null,"aymane.bendahmane14@gmail.com","aymane",passwordEncoder.encode("1234"),"male","aymane","",null,"",null,null));
         for (int i = 0; i < 4; i++) {
             userRepository.save(new Userr(null, "user" + i + "@gmail.com", "user" + i, passwordEncoder.encode("1234"),
                     random.nextBoolean() ? "male" : "female", "user" + i, "prenom" + i, random.nextInt(123456789) + "",
-                    "user" + 1 + " lot :" + random.nextInt(), null, null, null));
+                    "user" + 1 + " lot :" + random.nextInt(), null,  null));
         }
 
 
@@ -103,7 +101,7 @@ public class initDataImp implements initData {
         productItems.add(productItemsRepository.save(productItem1));
         productItems.add(productItemsRepository.save(productItem2));
 
-        commandeRepository.save(new Commande(null, new Date(), null,
+        commandeRepository.save(new Commande(null, new Date(), (productItem1.getArticle().getPrix()+productItem2.getArticle().getPrix())* random.nextInt(10),
                 "purchases description", productItems, u,null));
 
         return "Commands initialized !";
@@ -151,9 +149,12 @@ public class initDataImp implements initData {
         userRepository.save(
                 new Userr(null, "ADMIN@gmail.com", "admin", passwordEncoder.encode("1234"),
                         random.nextBoolean() ? "male" : "female", "admin", "admin", random.nextInt(123456789) +
-                        "", "user" + 1 + " lot :" + random.nextInt(), role2, null, null));
+                        "", "user" + 1 + " lot :" + random.nextInt(), role2, null));
         return "Roles initialized";
     }
 
-
+    public List<Commande> getCommands(Principal principal){
+        Userr u  = ConsultUserByName(principal.getName());
+        return commandeRepository.findCommandeByUserr(u);
+    }
 }
